@@ -70,8 +70,6 @@ final class PositiveFlowMethodRegistration<T extends Annotation> extends FlowMet
      */
     @Override
     boolean shouldInvokeFor(final Method testMethod) {
-        final Annotation[] presentAnnotations = testMethod.getAnnotations();
-
         annotationLoop:
         for (final T annotation : getAnnotations()) {
             final Class<? extends Annotation>[] relevantAnnotationClasses = getRelevantAnnotationClasses(annotation);
@@ -80,7 +78,7 @@ final class PositiveFlowMethodRegistration<T extends Annotation> extends FlowMet
             for (final Class<? extends Annotation> relevantAnnotationClass : relevantAnnotationClasses) {
 
                 // We want to check all the present annotations for one of the annotation class of interest.
-                for (final Annotation presentAnnotation : presentAnnotations) {
+                for (final Annotation presentAnnotation : getPresentAnnotations()) {
                     if (relevantAnnotationClass.isAssignableFrom(presentAnnotation.getClass())) {
                         // We've found an appropriate annotation for this one.
                         // Continue to check the next annotation class of interest.

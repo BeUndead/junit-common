@@ -53,7 +53,6 @@ final class NegativeFlowMethodRegistration<T extends Annotation> extends FlowMet
      */
     @Override
     boolean shouldInvokeFor(final Method testMethod) {
-        final Annotation[] presentAnnotations = testMethod.getAnnotations();
 
         for (final T annotation : getAnnotations()) {
             final Class<? extends Annotation>[] relevantAnnotationClasses = getRelevantAnnotationClasses(annotation);
@@ -63,7 +62,7 @@ final class NegativeFlowMethodRegistration<T extends Annotation> extends FlowMet
 
                 // For each annotation class of interest, we want to check if there's no present annotation of that
                 // class.
-                for (final Annotation presentAnnotation : presentAnnotations) {
+                for (final Annotation presentAnnotation : getPresentAnnotations()) {
                     if (relevantAnnotationClass.isAssignableFrom(presentAnnotation.getClass())) {
                         // The expected annotation was present; continue to see if all others are present.
                         continue relevantAnnotationLoop;

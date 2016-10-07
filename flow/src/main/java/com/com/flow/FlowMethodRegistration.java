@@ -5,8 +5,7 @@ import org.junit.platform.commons.util.AnnotationUtils;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 /**
  * Represents the registration for an {@code annotation-flow} {@code annotated} {@link Method}.
@@ -78,6 +77,21 @@ abstract class FlowMethodRegistration<T extends Annotation> {
      */
     final Collection<T> getAnnotations() {
         return this.annotations;
+    }
+
+    /**
+     * @return All {@link Annotation Annotations} present on both the {@link #method} and the {@link
+     * Method#getDeclaringClass() method's declaring Class}.
+     */
+    final Set<Annotation> getPresentAnnotations() {
+        final Set<Annotation> presentAnnotations = new HashSet<>();
+        presentAnnotations.addAll(Arrays.asList(method.getAnnotations()));
+        Class<?> containingClass = method.getDeclaringClass();
+        while (containingClass != null) {
+            presentAnnotations.addAll(Arrays.asList(containingClass.getAnnotations()));
+            containingClass = containingClass.getSuperclass();
+        }
+        return presentAnnotations;
     }
 
     /**
